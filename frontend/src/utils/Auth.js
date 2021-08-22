@@ -1,7 +1,7 @@
-export const BASE_URL = 'https://vnemenova.nomoredomains.rocks';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 function checkResponse(res) {
-    if (res.status === 200) {
+    if (res.status === 200 || 201) {
         return res.json();
     }
     return Promise.reject(`${res.status}`);

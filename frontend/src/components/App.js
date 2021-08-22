@@ -41,12 +41,10 @@ function App() {
     }, [])
     React.useEffect(() => {
         Auth.getContent()
-
             .then((res) => {
-                setEmail(res.data.email)
+                setEmail(res.email)
                 setLoggedIn(true)
                 history.push('/')
-
             })
             .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
