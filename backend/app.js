@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { Joi, celebrate, errors } = require('celebrate');
+const allowedCors = require('./middlewares/allowedCors');
 const userRoute = require('./routes/users');
 const cardRoute = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { allowedCors } = require('./middlewares/allowedCors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -68,7 +70,13 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-
+app.use(function(req, res, next) {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+}); 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
