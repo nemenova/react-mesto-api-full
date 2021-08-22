@@ -68,19 +68,21 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-// const allowedCors = [
-//   'https://praktikum.tk',
-//   'http://praktikum.tk',
-//   'localhost:3000',
-//   'http://vnemenova.nomoredomains.rocks',
-//   'https://vnemenova.nomoredomains.rocks'
-// ];
+const allowedCors = [
+  'https://praktikum.tk',
+  'http://praktikum.tk',
+  'localhost:3000',
+  'http://vnemenova.nomoredomains.rocks',
+  'https://vnemenova.nomoredomains.rocks',
+  'https://nemenova.nomoredomains.rocks',
+  'http://nemenova.nomoredomains.rocks'
+];
 app.use(function (req, res, next) {
-  // const { origin } = req.headers;
-  // if (allowedCors.includes(origin)) {
-  //   res.header('Access-Control-Allow-Origin', origin);
-  // }
-  res.header('Access-Control-Allow-Origin', "*");
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  // res.header('Access-Control-Allow-Origin', "*");
   next();
 });
 app.use(function (req, res, next) {
@@ -90,7 +92,15 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
   };
   next();
+  const requestHeaders = req.headers['access-control-request-headers']; 
+if (method === 'OPTIONS') {
+    // разрешаем кросс-доменные запросы с этими заголовками
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    // завершаем обработку запроса и возвращаем результат клиенту
+    return res.end();
+}
 });
+
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
