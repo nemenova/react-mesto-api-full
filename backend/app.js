@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { Joi, celebrate, errors } = require('celebrate');
-const allowedCors = require('./middlewares/allowedCors');
 const userRoute = require('./routes/users');
 const cardRoute = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
