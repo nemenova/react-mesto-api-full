@@ -10,7 +10,6 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { allowedCors } = require('./middlewares/allowedCors').default;
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -69,6 +68,13 @@ app.use((err, req, res, next) => {
     });
   next();
 });
+const allowedCors = [
+  'https://praktikum.tk',
+  'http://praktikum.tk',
+  'localhost:3000',
+  'http://vnemenova.nomoredomains.rocks',
+  'https://vnemenova.nomoredomains.rocks'
+];
 app.use(function(req, res, next) {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
