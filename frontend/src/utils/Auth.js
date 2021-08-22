@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://vnemenova.nomoredomains.rocks';
+export const BASE_URL = 'http://nemenova.nomoredomains.rocks';
 
 function checkResponse(res) {
     if (res.status === 200 || 201) {
