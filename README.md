@@ -1,4 +1,18 @@
 # react-mesto-api-full
-Репозиторий для приложения проекта `Mesto`, включающий фронтенд и бэкенд части приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями. Бэкенд расположите в директории `backend/`, а фронтенд - в `frontend/`. 
-  
-Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
+# Место
+
+**Social media about traveling interface.** You can set your profile and make your own cards with voyages descriptions.         
+
+technologies used: 
+React (hooks)
+CRA
+JS ES6
+API
+Webpack
+BEM  
+
+new: authorization, registration. Profile is aditable, photo is changeable. Routing: you can view the content only after registartion and authorization. Hashing passwords, email checking. API with MongoDB set with Mongoose.                   
+                             
+
+**View the result: http://vnemenova.nomoredomains.rocks/signin**        
+Enjoy your experience there!
