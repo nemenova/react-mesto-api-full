@@ -10,7 +10,7 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { allowedCors } = require('./middlewares/allowedCors');
+const { allowedCors } = require('./middlewares/allowedCors').default;
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -76,6 +76,11 @@ app.use(function(req, res, next) {
   }
   next();
 }); 
+const { method } = req;
+const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE"; 
+if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+};
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
