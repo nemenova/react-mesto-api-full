@@ -72,9 +72,9 @@ app.use((err, req, res, next) => {
 
 app.use(cors({
   origin: [
-    'https://mesto.mesto.students.nomoredomains.monster',
-    'http://mesto.mesto.students.nomoredomains.monster',
-    'http://localhost:3000',
+    'http://vnemenova.nomoredomains.rocks',
+    'https://vnemenova.nomoredomains.rocks',
+    'http://localhost:3000'
   ],
 }));
 
