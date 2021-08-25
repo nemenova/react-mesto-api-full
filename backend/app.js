@@ -29,13 +29,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://vnemenova.nomoredomains.rocks/')
+  res.setHeader('Access-Control-Allow-Origin', 'http://vnemenova.nomoredomains.rocks')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
 
   next()
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', 'http://vnemenova.nomoredomains.rocks/')
+    res.setHeader('Access-Control-Allow-Origin', 'http://vnemenova.nomoredomains.rocks')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
 
