@@ -4,13 +4,14 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { Joi, celebrate, errors } = require('celebrate');
+const cors = require('cors');
 const userRoute = require('./routes/users');
 const cardRoute = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const cors = require('cors');
+
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -27,13 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
-app.use(cors({
-  origin: [
-    'https://vnemenova.nomoredomains.rocks',
-    'http://vnemenova.nomoredomains.rocks',
-    'http://localhost:3000',
-  ],
-}));
+app.use(cors());
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
