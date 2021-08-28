@@ -79,7 +79,7 @@ class Api {
     }
 
     changeLikeCardStatus(id, isLiked) {
-        return fetch(`${this._address}/cards/likes/${id}`, {
+        return fetch(`${this._address}/cards/${id}/likes`, {
             method: isLiked ? "DELETE" : "PUT",
             // headers: this._token,
             credentials: 'include',
@@ -88,6 +88,6 @@ class Api {
     }
 }
 const api = new Api({
-    baseUrl: 'https://nemenova.nomoredomains.rocks',
+    baseUrl: 'http://localhost:3000',
 })
 export default api;

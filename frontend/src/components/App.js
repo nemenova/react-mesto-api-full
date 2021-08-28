@@ -33,7 +33,7 @@ function App() {
         Promise.all([api.getUserInfo(), api.getCards()])
             .then(([user, cards]) => {
                 setCurrentUser(user);
-                setCards(cards)
+                setCards(cards.cards)
             })
             .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
@@ -53,7 +53,8 @@ function App() {
     }, [history])
 
     function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        console.log(card)
+        const isLiked = card.likes.some(i => i === currentUser._id);
 
         api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
@@ -105,16 +106,17 @@ function App() {
     function handleRegister(password, email) {
         Auth.register(password, email)
             .then(() => {
-                setStatus(true)
-                setIsInfoTooltipOpen(true)
                 history.push('/signin');
+                setIsInfoTooltipOpen(true)
+                setStatus(true)
+                
             })
-            .then(() => {
-                setStatus(false)
-            })
-            .catch(err => console.log(err))
+            .catch((err) => {
                 setStatus(false)
                 setIsInfoTooltipOpen(true)
+                console.log(err)
+            })
+                
     }
 
     function handleSignOut() {
@@ -128,16 +130,13 @@ function App() {
             .then(() => {
                 setLoggedIn(true)
                 history.push('/');
-
+                setEmail(email);
             })
-            .catch(() => {
+            .catch((err) => {
                 setStatus(false)
                 setIsInfoTooltipOpen(true)
+                console.log(err)
             })
-            .catch(err => console.log(err))
-
-
-
     }
 
     function handleEditAvatarClick() {
