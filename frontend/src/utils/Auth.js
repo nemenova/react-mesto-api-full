@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://nemenova.nomoredomains.rocks';
+export const BASE_URL = 'https://nemenova.nomoredomains.rocks';
 
 function checkResponse(res) {
     if (res.status === 200 || 201) {
@@ -10,6 +10,7 @@ function checkResponse(res) {
 export const register = (password, email) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -28,6 +29,7 @@ export const register = (password, email) => {
 export const authorize = (password, email) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -44,6 +46,7 @@ export const authorize = (password, email) => {
 export const getContent = () => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
