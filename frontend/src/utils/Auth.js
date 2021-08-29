@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://nemenova.nomoredomains.rocks';
 
 function checkResponse(res) {
     if (res.status === 200 || 201) {
@@ -19,9 +19,6 @@ export const register = (password, email) => {
             JSON.stringify({ password, email })
     })
         .then(checkResponse)
-        // .then((res) => {
-        //     return res;
-        // })
 };
 
 export const authorize = (password, email) => {
