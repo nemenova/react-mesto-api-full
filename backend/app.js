@@ -12,7 +12,7 @@ const cardRoute = require('./routes/cards');
 const { createUser, login, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
-const centralErrorHandler = require('./errors/centralErrorHandler');
+const centralErrorHandler = require('./middlewares/centralErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -84,7 +84,7 @@ app.use('*', () => {
 app.use(errorLogger);
 
 app.use(errors());
-// eslint-disable-next-line no-undef
+
 app.use(centralErrorHandler);
 
 const limiter = rateLimit({
