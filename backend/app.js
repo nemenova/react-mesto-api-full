@@ -17,14 +17,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
+
 app.use(cors({
   credentials: true,
-  origin: [
-    'https://vnemenova.nomoredomains.rocks',
-    'http://vnemenova.nomoredomains.rocks',
-    'https://localhost:3000',
-    'http://localhost:3000',
-  ],
+  origin: 'https://vnemenova.nomoredomains.rocks',
 }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -38,13 +34,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-app.set('trust proxy', 1);
-app.use(limiter);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -92,6 +81,13 @@ app.use(errorLogger);
 app.use(errors());
 // eslint-disable-next-line no-undef
 app.use(CentralErrorHandler(err, req, res, next));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.set('trust proxy', 1);
+app.use(limiter);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
