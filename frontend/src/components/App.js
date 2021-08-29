@@ -40,19 +40,18 @@ function App() {
     }, []);
 
     React.useEffect(() => {
-        if (loggedIn) {
         Auth.getContent()
             .then((res) => {
-                setEmail(res.email)
-                setLoggedIn(true)
-                history.push('/')
+                if (res) {
+                    setEmail(res.email)
+                    setLoggedIn(true)
+                    history.push('/')
+                }
             })
             .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
                 setLoggedIn(false)
             })
-        }
-    
     }, [history, loggedIn]);
 
     function handleCardLike(card) {
@@ -144,7 +143,7 @@ function App() {
                 console.log(err)
             })
     }
-  
+
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
     }
@@ -169,7 +168,7 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <Header loggedIn={loggedIn} values={email} onSignOut={handleSignOut} />
             <Switch>
-            <ProtectedRoute
+                <ProtectedRoute
                     exact path="/"
                     loggedIn={loggedIn}
                     component={Main} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}
@@ -182,7 +181,7 @@ function App() {
                 <Route path="/signin">
                     <Login onLogin={handleSignIn} />
                 </ Route>
-                
+
             </Switch>
             <Footer />
             <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpened={isEditAvatarPopupOpen} onClose={closeAllPopups} />
