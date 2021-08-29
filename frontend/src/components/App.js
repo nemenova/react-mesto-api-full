@@ -28,8 +28,9 @@ function App() {
     const history = useHistory();
     const [email, setEmail] = React.useState(' ');
 
-
+    console.log(loggedIn)
     React.useEffect(() => {
+        // if (loggedIn) {
         Promise.all([api.getUserInfo(), api.getCards()])
             .then(([user, cards]) => {
                 setCurrentUser(user);
@@ -38,9 +39,11 @@ function App() {
             .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
             })
+        // }
     }, []);
 
     React.useEffect(() => {
+        if (loggedIn) {
         Auth.getContent()
             .then((res) => {
                 setEmail(res.email)
@@ -51,7 +54,9 @@ function App() {
                 console.log(err); // выведем ошибку в консоль
                 setLoggedIn(false)
             })
-    }, [history]);
+        }
+    
+    }, [history, loggedIn]);
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i === currentUser._id);
@@ -123,6 +128,9 @@ function App() {
             .then(() => {
                 setLoggedIn(false);
                 history.push('/signin');
+            })
+            .catch((err) => {
+                console.log(err); // выведем ошибку в консоль
             })
     }
 

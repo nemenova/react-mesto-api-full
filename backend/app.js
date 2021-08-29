@@ -52,9 +52,11 @@ app.post('/signup', celebrate({
   }).unknown(true),
 }), createUser);
 
-app.get('/signout', logout);
+
 
 app.use(auth);
+
+app.get('/signout', logout);
 
 app.use('/users', userRoute);
 app.use('/cards', cardRoute);

@@ -19,9 +19,9 @@ export const register = (password, email) => {
             JSON.stringify({ password, email })
     })
         .then(checkResponse)
-        .then((res) => {
-            return res;
-        })
+        // .then((res) => {
+        //     return res;
+        // })
 };
 
 export const authorize = (password, email) => {
