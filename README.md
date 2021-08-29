@@ -15,4 +15,5 @@ new: authorization, registration. Profile is aditable, photo is changeable. Rout
                              
 
 **View the result: http://vnemenova.nomoredomains.rocks/signin**        
+or use 178.154.207.116
 Enjoy your experience there!
