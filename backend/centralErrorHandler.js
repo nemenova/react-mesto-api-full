@@ -1,4 +1,4 @@
-function CentralErrorHandler(err, req, res, next) {
+module.exports.centralErrorHandler = (err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
 
@@ -11,5 +11,4 @@ function CentralErrorHandler(err, req, res, next) {
         : message,
     });
   next();
-}
-export default CentralErrorHandler;
+};
