@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { Joi, celebrate, errors } = require('celebrate');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const validator = require('validator');
 const userRoute = require('./routes/users');
 const cardRoute = require('./routes/cards');
 const { createUser, login, logout } = require('./controllers/users');
@@ -12,9 +14,6 @@ const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const CentralErrorHandler = require('./errors/CentralErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const rateLimit = require("express-rate-limit");
-const validator = require("validator"); 
-
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -34,7 +33,7 @@ app.use(requestLogger);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 100,
 });
 app.set('trust proxy', 1);
 app.use(limiter);
@@ -46,12 +45,11 @@ app.get('/crash-test', () => {
 });
 
 const method = (value) => {
-  let result = validator.isURL(value); 
-  if(result) {
+  const result = validator.isURL(value);
+  if (result) {
     return value;
-  } else {
-    throw new Error('URL validation err');
   }
+  throw new Error('URL validation err');
 };
 
 app.post('/signin', celebrate({
@@ -71,8 +69,6 @@ app.post('/signup', celebrate({
   }).unknown(true),
 }), createUser);
 
-
-
 app.use(auth);
 
 app.get('/signout', logout);
@@ -86,6 +82,7 @@ app.use('*', () => {
 app.use(errorLogger);
 
 app.use(errors());
+// eslint-disable-next-line no-undef
 app.use(CentralErrorHandler(err, req, res, next));
 
 app.listen(PORT, () => {

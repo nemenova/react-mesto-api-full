@@ -1,17 +1,16 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 const {
   getUsers, getUserById, getUser, updateProfile, updateAvatar,
 } = require('../controllers/users');
-const validator = require("validator"); 
 
 const method = (value) => {
-  let result = validator.isURL(value); 
-  if(result) {
+  const result = validator.isURL(value);
+  if (result) {
     return value;
-  } else {
-    throw new Error('URL validation err');
   }
+  throw new Error('URL validation err');
 };
 
 router.get('/', getUsers);
