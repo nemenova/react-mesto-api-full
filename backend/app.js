@@ -85,7 +85,7 @@ app.use(errorLogger);
 
 app.use(errors());
 // eslint-disable-next-line no-undef
-app.use(centralErrorHandler(err, req, res, next));
+app.use(centralErrorHandler);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
