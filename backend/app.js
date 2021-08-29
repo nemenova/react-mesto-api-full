@@ -17,7 +17,15 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({
+  credentials: true,
+  origin: [
+    'https://vnemenova.nomoredomains.rocks',
+    'http://vnemenova.nomoredomains.rocks',
+    'https://localhost:3000',
+    'http://localhost:3000',
+  ],
+}));
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -87,5 +95,6 @@ app.use(CentralErrorHandler(err, req, res, next));
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });
