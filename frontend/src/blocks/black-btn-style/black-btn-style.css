@@ -2,7 +2,7 @@
      transition: opacity 0.3s linear 0s;
 }
  .black-btn-style:hover{
-     opacity:80%;
+     opacity: .8;
 }
  .black-btn-style:focus{
      outline: none;
