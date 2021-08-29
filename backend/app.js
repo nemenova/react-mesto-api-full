@@ -10,7 +10,10 @@ const cardRoute = require('./routes/cards');
 const { createUser, login, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
+const CentralErrorHandler = require('./errors/CentralErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const rateLimit = require("express-rate-limit");
+const validator = require("validator"); 
 
 
 const { PORT = 3000 } = process.env;
@@ -29,11 +32,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+app.set('trust proxy', 1);
+app.use(limiter);
+
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
+
+const method = (value) => {
+  let result = validator.isURL(value); 
+  if(result) {
+    return value;
+  } else {
+    throw new Error('URL validation err');
+  }
+};
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -48,7 +67,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(8),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string(),
+    avatar: Joi.string().custom(method),
   }).unknown(true),
 }), createUser);
 
@@ -67,20 +86,7 @@ app.use('*', () => {
 app.use(errorLogger);
 
 app.use(errors());
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
+app.use(CentralErrorHandler(err, req, res, next));
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

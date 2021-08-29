@@ -3,13 +3,23 @@ const { celebrate, Joi } = require('celebrate');
 const {
   getUsers, getUserById, getUser, updateProfile, updateAvatar,
 } = require('../controllers/users');
+const validator = require("validator"); 
+
+const method = (value) => {
+  let result = validator.isURL(value); 
+  if(result) {
+    return value;
+  } else {
+    throw new Error('URL validation err');
+  }
+};
 
 router.get('/', getUsers);
 router.get('/me', getUser);
 
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum().length(24),
+    userId: Joi.string().hex().length(24),
   }),
 }), getUserById);
 
@@ -22,7 +32,7 @@ router.patch('/me', celebrate({
 
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required(),
+    avatar: Joi.string().required().custom(method),
   }),
 }), updateAvatar);
 
