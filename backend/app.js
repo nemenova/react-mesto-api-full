@@ -7,7 +7,7 @@ const { Joi, celebrate, errors } = require('celebrate');
 const cors = require('cors');
 const userRoute = require('./routes/users');
 const cardRoute = require('./routes/cards');
-const { createUser, login } = require('./controllers/users');
+const { createUser, login, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -29,6 +29,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -45,6 +51,8 @@ app.post('/signup', celebrate({
     avatar: Joi.string(),
   }).unknown(true),
 }), createUser);
+
+app.get('/signout', logout);
 
 app.use(auth);
 

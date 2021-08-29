@@ -38,7 +38,8 @@ function App() {
             .catch((err) => {
                 console.log(err); // выведем ошибку в консоль
             })
-    }, [])
+    }, []);
+
     React.useEffect(() => {
         Auth.getContent()
             .then((res) => {
@@ -50,10 +51,9 @@ function App() {
                 console.log(err); // выведем ошибку в консоль
                 setLoggedIn(false)
             })
-    }, [history])
+    }, [history]);
 
     function handleCardLike(card) {
-        console.log(card)
         const isLiked = card.likes.some(i => i === currentUser._id);
 
         api.changeLikeCardStatus(card._id, isLiked)
@@ -109,20 +109,21 @@ function App() {
                 history.push('/signin');
                 setIsInfoTooltipOpen(true)
                 setStatus(true)
-                
+
             })
             .catch((err) => {
                 setStatus(false)
                 setIsInfoTooltipOpen(true)
                 console.log(err)
             })
-                
     }
 
     function handleSignOut() {
-        localStorage.removeItem('token');
-        setLoggedIn(false)
-        history.push('/signin');
+        Auth.signOut()
+            .then(() => {
+                setLoggedIn(false);
+                history.push('/signin');
+            })
     }
 
     function handleSignIn(password, email) {
@@ -138,7 +139,7 @@ function App() {
                 console.log(err)
             })
     }
-
+  
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
     }
@@ -163,19 +164,20 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <Header loggedIn={loggedIn} values={email} onSignOut={handleSignOut} />
             <Switch>
+            <ProtectedRoute
+                    exact path="/"
+                    loggedIn={loggedIn}
+                    component={Main} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}
+                    onCardClick={handleCardClick} onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick}
+                    onAddPlace={handleAddPlaceClick}
+                />
                 <Route path="/signup">
                     <Register onRegister={handleRegister} />
                 </ Route>
                 <Route path="/signin">
                     <Login onLogin={handleSignIn} />
                 </ Route>
-                <ProtectedRoute
-                    path="/"
-                    loggedIn={loggedIn}
-                    component={Main} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete}
-                    onCardClick={handleCardClick} onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                />
+                
             </Switch>
             <Footer />
             <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpened={isEditAvatarPopupOpen} onClose={closeAllPopups} />

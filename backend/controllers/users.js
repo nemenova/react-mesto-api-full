@@ -98,6 +98,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
+        
       }
       res.send(user);
     })
@@ -131,4 +132,14 @@ module.exports.login = (req, res, next) => {
       throw new UnauthorizedError('Неправильные почта или пароль');
     })
     .catch(next);
+};
+
+module.exports.logout = (req, res) => {
+  res.clearCookie('jwt', {
+    httpOnly: true, 
+    sameSite: 'none', 
+    secure: true,
+  })
+  .send({ message: 'Пользователь вышел из профиля' })
+  .catch(next);
 };

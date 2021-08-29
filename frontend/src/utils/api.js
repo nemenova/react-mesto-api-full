@@ -12,14 +12,12 @@ class Api {
     }
     getCards() {
         return fetch(`${this._address}/cards`, {
-            // headers: this._token,
             credentials: 'include',
         })
             .then(this._checkResponse) 
     }
     getUserInfo() {
         return fetch(`${this._address}/users/me`, {
-            // headers: this._token,
             credentials: 'include',
         
         })
@@ -28,7 +26,6 @@ class Api {
     changeUserInfo(user) {
         return fetch(`${this._address}/users/me`,  {
             method: 'PATCH',
-            // headers: this._token,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,7 +40,6 @@ class Api {
     addNewCard(card) {
         return fetch(`${this._address}/cards`, {
             method: 'POST',
-            // headers: this._token,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +54,6 @@ class Api {
     changeProfilePhoto(data) {
         return fetch(`${this._address}/users/me/avatar`, {
             method: 'PATCH',
-            // headers: this._token,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +67,6 @@ class Api {
     deleteCard(id) {
         return fetch(`${this._address}/cards/${id}`, {
             method: 'DELETE',
-            // headers: this._token,
             credentials: 'include',
             
         }).then(this._checkResponse)
@@ -81,7 +75,6 @@ class Api {
     changeLikeCardStatus(id, isLiked) {
         return fetch(`${this._address}/cards/${id}/likes`, {
             method: isLiked ? "DELETE" : "PUT",
-            // headers: this._token,
             credentials: 'include',
 
         }).then(this._checkResponse)

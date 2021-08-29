@@ -18,9 +18,7 @@ export const register = (password, email) => {
         body:
             JSON.stringify({ password, email })
     })
-        .then((response) => {
-            checkResponse(response);
-        })
+        .then(checkResponse)
         .then((res) => {
             return res;
         })
@@ -31,27 +29,25 @@ export const authorize = (password, email) => {
         method: 'POST',
         credentials: 'include',
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ password, email })
     })
-        .then((response => checkResponse(response)))
-        .then((data) => {
-            console.log(data)
-            localStorage.setItem('token', data.token);
-            return data;
-        })
+        .then(checkResponse)
 };
 
 export const getContent = () => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        }
     })
-        .then(res => checkResponse(res))
-        .then(data => data)
-} 
+        .then(checkResponse);
+}
+export const signOut = () => {
+    return fetch(`${BASE_URL}/signout`, {
+        method: 'GET',
+        credentials: 'include',
+    })
+        .then(checkResponse)
+}
