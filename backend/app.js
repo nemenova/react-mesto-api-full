@@ -1,10 +1,10 @@
 require('dotenv').config();
-const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { Joi, celebrate, errors } = require('celebrate');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const validator = require('validator');
 const userRoute = require('./routes/users');
@@ -12,12 +12,21 @@ const cardRoute = require('./routes/cards');
 const { createUser, login, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
-const CentralErrorHandler = require('./errors/CentralErrorHandler');
+const centralErrorHandler = require('./errors/centralErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  credentials: true,
+  origin: [
+    'https://vnemenova.nomoredomains.rocks',
+    'http://vnemenova.nomoredomains.rocks',
+    'https://localhost:3000',
+    'http://localhost:3000',
+  ],
+}));
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -76,7 +85,7 @@ app.use(errorLogger);
 
 app.use(errors());
 // eslint-disable-next-line no-undef
-app.use(CentralErrorHandler(err, req, res, next));
+app.use(centralErrorHandler(err, req, res, next));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
